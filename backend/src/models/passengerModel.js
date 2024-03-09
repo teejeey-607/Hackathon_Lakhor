@@ -8,7 +8,7 @@ const createPassengersTable = async () => {
       cid VARCHAR(11) NOT NULL,
       gender VARCHAR(10) CHECK (gender IN ('Male', 'Female', 'Others')) NOT NULL,
       mobilenumber VARCHAR(8) NOT NULL,
-      emergencycontactnumber VARCHAR(8) NOT NULL
+      emergencycontactnumber VARCHAR(8)
     )
   `;
 

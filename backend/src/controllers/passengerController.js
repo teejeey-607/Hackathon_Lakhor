@@ -92,16 +92,16 @@ const getAllPassengers = async (req, res) => {
 };
 
 const createPassenger = async (req, res) => {
-  const { name, CID, gender, mobilenumber, emergencycontactnumber } = req.body;
+  const { name, CID, gender, mobilenumber } = req.body;
 
   try {
     const query = `
-      INSERT INTO passengers (name, CID, gender, mobilenumber, emergencycontactnumber)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO passengers (name, CID, gender, mobilenumber)
+      VALUES ($1, $2, $3, $4)
       RETURNING *
     `;
 
-    const values = [name, CID, gender, mobilenumber,emergencycontactnumber];
+    const values = [name, CID, gender, mobilenumber];
 
     const { rows } = await pool.query(query, values);
     res.status(201).json(rows[0]);

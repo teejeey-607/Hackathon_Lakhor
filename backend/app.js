@@ -44,16 +44,47 @@ async function subscribeToNDINATS(threadId) {
     // console.log("iii", subscription);
     // Process incoming messages
     for await (const msg of subscription) {
-      const dd = jc.decode(msg.data);
-      console.log("Received message from NDI NATS:", dd);
+      const payload = jc.decode(msg.data);
+      console.log(
+        "Received message from NDI NATS:",
+        payload.data.requested_presentation.revealed_attrs["ID Number"].value
+      );
+      console.log(
+        "Received message from NDI NATS:",
+        payload.data.requested_presentation.revealed_attrs["Full Name"].value
+      );
+      console.log(
+        "Received message from NDI NATS:",
+        payload.data.requested_presentation.revealed_attrs["Gender"].value
+      );
+      console.log(
+        "Received message from NDI NATS:",
+        payload.data.requested_presentation.self_attested_attrs["Mobile Number"]
+      );
       // Handle the received message as needed
-    }
-    
-  // // Handle errors outside of the try block
-  // subscription.on("error", (err) => {
-  //   console.error("Subscription error:", err);
-  // });
+      const response = await axios.post(
+        "http://192.168.101.210:3000/api/passengers",
+        {
+          CID: payload.data.requested_presentation.revealed_attrs["ID Number"]
+            .value,
+          name: payload.data.requested_presentation.revealed_attrs["Full Name"]
+            .value,
+          gender:
+            payload.data.requested_presentation.revealed_attrs["Gender"].value,
+          mobilenumber:
+            payload.data.requested_presentation.self_attested_attrs[
+              "Mobile Number"
+            ],
+        }
+      );
 
+      console.log("create passenger",response.data);
+    }
+
+    // // Handle errors outside of the try block
+    // subscription.on("error", (err) => {
+    //   console.error("Subscription error:", err);
+    // });
   } catch (err) {
     console.error("Error connecting to NDI NATS server:", err);
     return; // exit function early if there's an error
@@ -126,7 +157,6 @@ app.get("/api/sample", (req, res) => {
 
 app.get("/subscribe", async (req, res) => {
   try {
-    
     var deepLinkURL = "";
     const response = await axios.post(
       "https://staging.bhutanndi.com/authentication/authenticate",
@@ -227,7 +257,9 @@ app.get("/subscribe", async (req, res) => {
         }
       );
       console.log(response.data["data"]["deepLinkURL"]);
-      deepLinkURL = response.data["data"]["deepLinkURL"];
+      // deepLinkURL = `${response.data["data"]["deepLinkURL"]}&returnUrl=exp://127.0.0.1:8081`;
+      deepLinkURL = `${response.data["data"]["deepLinkURL"]}`;
+      console.log(deepLinkURL);
       const ThreadID = response.data["data"]["proofRequestThreadId"];
       subscribeToNDINATS(ThreadID);
     }
