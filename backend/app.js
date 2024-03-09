@@ -25,7 +25,7 @@ const app = express();
 // Configuration for subscribing to NDI NATS server for staging
 const natsURL = "nats://13.229.203.54:4222";
 const seed = new TextEncoder().encode(
-  "SUAEL6GG2L2HIF7DUGZJGMRUFKXELGGYFMHF76UO2AYBG3K4YLWR3FKC2Q"
+  "SUAPXY7TJFUFE3IX3OEMSLE3JFZJ3FZZRSRSOGSG2ANDIFN77O2MIBHWUM"
 );
 
 async function subscribeToNDINATS(threadId) {
@@ -35,26 +35,28 @@ async function subscribeToNDINATS(threadId) {
 
     const nc = await connect({
       servers: [natsURL],
-      debug: true,
+      // debug: true,
       authenticator: nkeyAuthenticator(seed),
     });
 
     // Subscribe to the desired pattern ('threadId')
     const subscription = nc.subscribe(threadId, { max: 1 });
-    console.log("iii", subscription);
+    // console.log("iii", subscription);
     // Process incoming messages
     for await (const msg of subscription) {
       const dd = jc.decode(msg.data);
       console.log("Received message from NDI NATS:", dd);
       // Handle the received message as needed
     }
+    
+  // // Handle errors outside of the try block
+  // subscription.on("error", (err) => {
+  //   console.error("Subscription error:", err);
+  // });
 
-    // Handle errors
-    subscription.on("error", (err) => {
-      console.error("Subscription error:", err);
-    });
   } catch (err) {
     console.error("Error connecting to NDI NATS server:", err);
+    return; // exit function early if there's an error
   }
 }
 
