@@ -63,7 +63,6 @@ export default function Passenger({ navigation }) {
             </View>
           </Pressable>
         )}
-        {!showLoginButton && !user && (
           <Pressable
             style={registerButtonStyle}
             onPress={() => navigation.navigate('PassengerRegistration')}
@@ -74,7 +73,6 @@ export default function Passenger({ navigation }) {
               <Text style={{ color: 'white', fontWeight: '600' }}>REGISTER</Text>
             </View>
           </Pressable>
-        )}
       </View>
     </View>
   );

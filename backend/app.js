@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./src/utils/db');
 const dotenv = require('dotenv');
+const connect =require("nats");
 
 const passengerRoutes = require('./src/routes/passengerRoutes');
 const driverRoutes = require('./src/routes/driverRoutes');
@@ -18,6 +19,34 @@ const feedbackModel =require('./src/models/feedbackModel')
 dotenv.config();
 
 const app = express();
+
+const servers = [
+  {},
+  { servers: ["demo.nats.io:4442", "demo.nats.io:4222"] },
+  { servers: "demo.nats.io:4443" },
+  { port: 4222 },
+  { servers: "localhost" },
+];
+
+await servers.forEach(async (v) => {
+  try {
+    const nc = await connect(v);
+    console.log(`connected to ${nc.getServer()}`);
+    // this promise indicates the client closed
+    const done = nc.closed();
+    // do something with the connection
+
+    // close the connection
+    await nc.close();
+    // check if the close was OK
+    const err = await done;
+    if (err) {
+      console.log(`error closing:`, err);
+    }
+  } catch (err) {
+    console.log(`error connecting to ${JSON.stringify(v)}`);
+  }
+});
 
 // Parse URL-encoded bodies (e.g., form data)
 // app.use(bodyParser.urlencoded({ extended: true }));
