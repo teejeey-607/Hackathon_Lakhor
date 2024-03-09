@@ -52,11 +52,11 @@ export default function Passenger({ navigation }) {
       <Image style={styles.logo} source={require('../../../assets/image/logo.png')} />
       <View style={{width:'100%',alignItems:'center'}}>
         <View style={{width:'80%',alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
-          <View style={{borderWidth:1,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
+          <View style={{borderWidth:0.5,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
           <View style={{justifyContent:'center'}}>        
             <Text style={{fontSize:15,width:'100%',paddingHorizontal:10,fontWeight:500,color:'#626262'}}>Using</Text>
             </View>
-          <View style={{borderWidth:1,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
+          <View style={{borderWidth:0.5,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
 
         </View>
           <View style={{backgroundColor:'#111B2B',borderRadius:5,marginTop:10}}>
