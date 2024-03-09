@@ -137,7 +137,7 @@ const CustomAlert = ({ message, visible, onClose }) => {
 
 
 export default function PassengerHome({ navigation }){
-    StatusBar.setBackgroundColor('#FBD3A8');
+    // StatusBar.setBackgroundColor('#FBD3A8');
     StatusBar.setBarStyle('dark-content');
 
 
@@ -299,7 +299,7 @@ const handleCommon = async (type) => {
 
 
     return (
-        <ImageBackground style={[styles.overlay1, loading && styles.loadingBackground]} source={require('../../../assets/image/bg.png')}
+        <View style={[styles.overlay1, loading && styles.loadingBackground]} source={require('../../../assets/image/bg.png')}
         resizeMode='contain'>
            <CustomAlert
                   message={alertMessage}
@@ -321,27 +321,22 @@ const handleCommon = async (type) => {
         <View style={styles.head}>
             <View style={styles.text}>
                 <View style={{width:'68%'}}>
-                    <Text style={{ fontSize: 14, fontWeight:'bold',fontFamily:'Roboto' }}>Get A Taxi Now!</Text>
-                    <Text style={{ fontSize:11,marginTop:4,fontWeight:400,fontFamily:'Roboto',lineHeight:20}}>
+                    <Text style={{ fontSize: 14, fontWeight:'bold' }}>Get A Taxi Now!</Text>
+                    <Text style={{ fontSize:11,marginTop:4,fontWeight:400,lineHeight:20}}>
                     No matter where you're headed, we'll make sure you reach your destination.
                     </Text>
                 </View>
-                <View style={{top:'20%',zIndex:2}} >
+                <View style={{top:'5%',zIndex:2}} >
                 <Image  source={require('../../../assets/image/taxi.png')} style={{resizeMode: 'contain',height:70,width:100}}/>
                 </View>
             </View>
         <View>
             <View style={styles.drive}>
             <View style={styles.route}>
-            <Text style={{fontSize:12,fontFamily:'Roboto',marginTop:'5%',fontWeight:'700',letterSpacing:1}}>Where you want to go?</Text>
-          
-             
-             
-            
-
+            <Text style={{fontSize:12,marginTop:'5%',fontWeight:'700',letterSpacing:1}}>Where you want to go?</Text>
             <View style={styles.inputContainer}>
               
-                  <Ionicons name="location" size={25} color="red" style={styles.icon} />
+                  <Ionicons name="location" size={20} color="red" style={styles.icon} />
                   <TextInput
           style={styles.input}
           placeholder="Enter Your Destination"
@@ -354,7 +349,7 @@ const handleCommon = async (type) => {
         />
         {showDropdown && (
           <TouchableOpacity style={styles.closeIcon} onPress={handleCloseDropdown}>
-            <Ionicons name="close" size={24} color="black" />
+            <Ionicons name="close" size={20} color="black" />
           </TouchableOpacity>
         )}
          {showDropdown && (
@@ -402,27 +397,32 @@ const handleCommon = async (type) => {
     
          <View style={{marginTop:70}}>
                
-                <View  style={{flexDirection:'row',width:'89%',height:130,marginTop:40,marginLeft:20}}>
+                <View  style={{width:'100%',height:130,marginTop:40,marginHorizontal:20}}>
                   <TouchableOpacity
-                  style={styles.rscontainer}
+                  style={{...styles.rscontainer,backgroundColor:'#F9F4F4'}}
                     onPress={handleReverse}>
                     <View  >
                         <Image  source={require('../../../assets/image/reserved.png')} style={{resizeMode: 'contain',height:100,width:150,marginTop:-35}}/>
-                        <Text style={styles.text1}>Reserved</Text>   
+                        <View style={{backgroundColor:"#0F992E",justifyContent:'center',height:30,marginTop:40}}>
+                        <Text style={styles.text1}>Reserved</Text> 
+                        </View>
+                          
                     </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.rscontainer} onPress={handleShare} >
+                    <TouchableOpacity style={{...styles.rscontainer,marginTop:50,backgroundColor:'#F4F8F9'}} onPress={handleShare} >
                     <View >
                         <Image  source={require('../../../assets/image/sharing.png')} style={{resizeMode: 'contain',height:100,width:150,marginTop:-35}}/>
+                        <View style={{backgroundColor:"#0F992E",justifyContent:'center',height:30,marginTop:40}}>
                         <Text style={styles.text1}>Sharing</Text> 
+                        </View>
                     </View>
 
                     </TouchableOpacity>
                    
                 </View>
              
-                <View>
-                <Text style={{paddingHorizontal:'10%',fontSize: 14, fontWeight:'bold',fontFamily:'Roboto',color:'#4A4A4A',marginTop:25}}>
+                {/* <View>
+                <Text style={{paddingHorizontal:'10%',fontSize: 14, fontWeight:'bold',color:'#4A4A4A',marginTop:25}}>
                   Pre-Defined Destinations
                   </Text>
                 <FlatList
@@ -437,14 +437,14 @@ const handleCommon = async (type) => {
                     
    
                     />
-                </View>
+                </View> */}
                
                
         </View>  
      
  
      
-    </ImageBackground>
+    </View>
     )
 }
 const styles = StyleSheet.create({
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
         flexDirection:'row'
     },
     drive:{
-     
+        marginTop:15,
         marginHorizontal:"6%",
         borderRadius:10,
 
@@ -472,10 +472,10 @@ const styles = StyleSheet.create({
         shadowColor: 'rgba(0, 0, 0, 0.5)',
         shadowOffset: {
           width: 0,
-          height: 1,
+          height: 0.1,
         },
-        shadowOpacity: 1,
-        shadowRadius: 3,
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
         elevation: 5, // for Android
     },
     container: {
@@ -583,30 +583,19 @@ const styles = StyleSheet.create({
       height: 40,
     },
     rscontainer:{
-       backgroundColor:'white',
-       width:'49%',
-       alignItems:'center',
-       height:130,
-       padding:10,
-       marginLeft:2,
-       marginRight:2,
-       borderRadius:10,
-        shadowColor: 'rgba(0, 0, 0, 0.5)',
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        elevation: 5, // for Android
+        backgroundColor:'white',
+        width:'90%',
+        alignItems:'center',
+        height:130,
+        padding:10,
         },
 
-        text1: {
-          marginTop:5, // Adjust the margin as needed
-          fontSize:14, // Adjust the font size as needed
-          fontWeight:'bold',
+        text1: { 
+          fontSize:13, // Adjust the font size as needed
+          fontWeight:'500',
           letterSpacing:1,
-          textAlign:'center'
+          textAlign:'center',
+          color:'white'
           // Add more text styling as needed
         },
         overlay1: {

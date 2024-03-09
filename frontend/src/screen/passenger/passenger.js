@@ -50,7 +50,30 @@ export default function Passenger({ navigation }) {
       <Image style={styles.welcome} source={require('../../../assets/image/passenger.png')} />
       <Text style={styles.text}>Welcome to</Text>
       <Image style={styles.logo} source={require('../../../assets/image/logo.png')} />
-      <View style={styles.role}>
+      <View style={{width:'100%',alignItems:'center'}}>
+        <View style={{width:'80%',alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
+          <View style={{borderWidth:1,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
+          <View style={{justifyContent:'center'}}>        
+            <Text style={{fontSize:15,width:'100%',paddingHorizontal:10,fontWeight:500,color:'#626262'}}>Using</Text>
+            </View>
+          <View style={{borderWidth:1,borderColor:'#626262',width:'40%',justifyContent:'center'}}></View>
+
+        </View>
+          <View style={{backgroundColor:'#111B2B',borderRadius:5,marginTop:10}}>
+          <Image style={{height:40,width:40}} source={require('../../../assets/image/ndi.png')} />
+          </View>
+        <Pressable style={{borderWidth:1,borderColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,width:'80%',marginTop:10}}>
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+            <Text style={{color:'#626262',fontWeight:500}}>REGISTER</Text>
+          </View>
+        </Pressable>
+        <Pressable style={{backgroundColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,marginTop:8,width:'80%'}}>
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+            <Text style={{color:'white',fontWeight:500}}>LOGIN</Text>
+          </View>
+        </Pressable>
+      </View>
+      {/* <View style={styles.role}>
         {!user && showLoginButton && (
           <Pressable
             style={loginButtonStyle}
@@ -75,7 +98,7 @@ export default function Passenger({ navigation }) {
             </View>
           </Pressable>
         )}
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -87,13 +110,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   dragon: {
-    marginTop: '20%',
+    marginTop: '15%',
     width: '90%',
     resizeMode: 'contain',
   },
   welcome: {
     position: 'absolute',
-    marginTop: '36%',
+    marginTop: '30%',
     width: '32%',
     resizeMode: 'contain',
   },
@@ -101,12 +124,13 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     width: '55%',
     resizeMode: 'contain',
-    height: '10%',
+    height: '15%',
   },
   text: {
     marginTop: '10%',
     fontWeight: '800',
     fontSize: 18,
+    color:'#626262'
   },
   role: {
     paddingHorizontal: '10%',

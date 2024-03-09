@@ -170,7 +170,7 @@ export default function Login({ navigation }) {
             width:"50%",
             marginTop:"25%",
             resizeMode:"contain",
-            height:'10%'
+            height:'13%'
         },
 
         register:{
