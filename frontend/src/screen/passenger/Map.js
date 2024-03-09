@@ -192,15 +192,15 @@ const MapPage = ({ route,navigation}) => {
   
     </View>
     <View style={{alignItems:'center',paddingTop:20,backgroundColor:'white'}}>
-        <TextInput  style={styles.input} placeholder='pick time'
+        {/* <TextInput  style={styles.input} placeholder='pick time'
         value={time}
         onChangeText={(text) => setTime(text)}
         />
           <TextInput  style={styles.input} placeholder='date'
         value={date}
         onChangeText={(text) => setDate(text)}
-        />
-           {/* <View>
+        /> */}
+           <View>
       <View style={{width:'80%'}}>
           <View style={{flexDirection:'row',justifyContent:'center'}}>
             <View style={{justifyContent:'center'}}>
@@ -233,7 +233,7 @@ const MapPage = ({ route,navigation}) => {
 
           </View>
 
-    </View> */}
+    </View>
 
         {/* <TextInput style={styles.input}
          placeholder='number of passenger'
