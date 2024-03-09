@@ -73,7 +73,7 @@ export default function Passenger({ navigation }) {
           </View>
         </TouchableOpacity>
       </View>
-      {/* {/* <View style={styles.role}>
+      {/* <View style={styles.role}>
         {!user && showLoginButton && (
           <Pressable
             style={loginButtonStyle}
