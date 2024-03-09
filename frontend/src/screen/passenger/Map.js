@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '12%',
     left: '5%',
-    zIndex: 10, // To ensure it appears above other content
+    zIndex: 10,
     padding: 5,
     borderRadius: 50,
     backgroundColor:'white'

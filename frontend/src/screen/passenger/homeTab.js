@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 1, // Ensure the overlay is above other elements
+      zIndex: 2, // Ensure the overlay is above other elements
     },
 
     inputContainer: {
