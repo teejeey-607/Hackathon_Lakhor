@@ -3,7 +3,9 @@ const cors = require("cors");
 const pool = require("./src/utils/db");
 const dotenv = require("dotenv");
 // const { subscribeToNATS } = require("./server");
-const { connect, nkeyAuthenticator } = require('nats');
+const { connect, nkeyAuthenticator, JSONCodec } = require("nats");
+const axios = require("axios");
+
 const passengerRoutes = require("./src/routes/passengerRoutes");
 const driverRoutes = require("./src/routes/driverRoutes");
 const rideRoutes = require("./src/routes/rideRoutes");
@@ -21,35 +23,38 @@ dotenv.config();
 const app = express();
 
 // Configuration for subscribing to NDI NATS server for staging
-const natsURL = 'nats://13.229.203.54:4222';
+const natsURL = "nats://13.229.203.54:4222";
 const seed = new TextEncoder().encode(
-  "SUAEL6GG2L2HIF7DUGZJGMRUFKXELGGYFMHF76UO2AYBG3K4YLWR3FKC2Q",
+  "SUAEL6GG2L2HIF7DUGZJGMRUFKXELGGYFMHF76UO2AYBG3K4YLWR3FKC2Q"
 );
 
 async function subscribeToNDINATS(threadId) {
   try {
+    console.log("Subscribe to " + threadId);
+    const jc = JSONCodec();
+
     const nc = await connect({
       servers: [natsURL],
+      debug: true,
       authenticator: nkeyAuthenticator(seed),
     });
 
-    console.log('Connected to NDI NATS server');
-
     // Subscribe to the desired pattern ('threadId')
-    const subscription = nc.subscribe(threadId);
-
+    const subscription = nc.subscribe(threadId, { max: 1 });
+    console.log("iii", subscription);
     // Process incoming messages
     for await (const msg of subscription) {
-      console.log('Received message from NDI NATS:', msg.data);
+      const dd = jc.decode(msg.data);
+      console.log("Received message from NDI NATS:", dd);
       // Handle the received message as needed
     }
 
     // Handle errors
-    subscription.on('error', (err) => {
-      console.error('Subscription error:', err);
+    subscription.on("error", (err) => {
+      console.error("Subscription error:", err);
     });
   } catch (err) {
-    console.error('Error connecting to NDI NATS server:', err);
+    console.error("Error connecting to NDI NATS server:", err);
   }
 }
 
@@ -117,12 +122,120 @@ app.get("/api/sample", (req, res) => {
   res.json({ message: "Hello from the backend!" });
 });
 
-app.post("/subscribe", (req, res) => {
-  const { ThreadID } = req.body;
-  console.log(ThreadID);
-  subscribeToNDINATS(ThreadID);
-  res.json({ message: "Hello from the backend!" });
-  // subscribeToNATS();
+app.get("/subscribe", async (req, res) => {
+  try {
+    
+    var deepLinkURL = "";
+    const response = await axios.post(
+      "https://staging.bhutanndi.com/authentication/authenticate",
+      {
+        grant_type: "client_credentials",
+        client_id: "3tq7ho23g5risndd90a76jre5f",
+        client_secret: "111rvn964mucumr6c3qq3n2poilvq5v92bkjh58p121nmoverquh",
+      }
+    );
+
+    // Handle the response from the authentication endpoint
+    // For demonstration, let's assume you want to do something with the response
+    console.log("Authentication response:", response.data.access_token);
+    const access_token = response.data.access_token;
+    if (access_token) {
+      const response = await axios.post(
+        `https://stageclient.bhutanndi.com/verifier/proof-request`,
+        {
+          proofName: "Foundational ID",
+          proofAttributes: [
+            {
+              name: "Full Name",
+              restrictions: [
+                {
+                  cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                  schema_id: "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+                },
+              ],
+            },
+            {
+              name: "Gender",
+              restrictions: [
+                {
+                  cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                  schema_id: "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+                },
+              ],
+            },
+            // {
+            //   name: "Date of Birth",
+            //   restrictions: [
+            //     {
+            //       cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+            //       schema_id:
+            //         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+            //     },
+            //   ],
+            // },
+            {
+              name: "ID Type",
+              restrictions: [
+                {
+                  cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                  schema_id: "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+                },
+              ],
+            },
+            {
+              name: "ID Number",
+              restrictions: [
+                {
+                  cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                  schema_id: "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+                },
+              ],
+            },
+            // {
+            //   name: "Household Number",
+            //   restrictions: [
+            //     {
+            //       cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+            //       schema_id:
+            //         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+            //     },
+            //   ],
+            // },
+            // {
+            //   name: "Blood Type",
+            //   restrictions: [
+            //     {
+            //       cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+            //       schema_id:
+            //         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
+            //     },
+            //   ],
+            // },
+            {
+              name: "Mobile Number",
+              restrictions: [],
+              selfAttestedAllowed: true,
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      console.log(response.data["data"]["deepLinkURL"]);
+      deepLinkURL = response.data["data"]["deepLinkURL"];
+      const ThreadID = response.data["data"]["proofRequestThreadId"];
+      subscribeToNDINATS(ThreadID);
+    }
+
+    // Send a response back to the client
+    res.json({ deepLinkURL: deepLinkURL });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // Use routes
