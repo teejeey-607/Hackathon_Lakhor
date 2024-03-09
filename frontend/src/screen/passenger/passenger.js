@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable,TouchableOpacity } from 'react-native';
 import isUserRegistered from './isUserRegistered';
 import { useAuth } from './AuthContext';
 
@@ -62,16 +62,16 @@ export default function Passenger({ navigation }) {
           <View style={{backgroundColor:'#111B2B',borderRadius:5,marginTop:10}}>
           <Image style={{height:40,width:40}} source={require('../../../assets/image/ndi.png')} />
           </View>
-        <Pressable style={{borderWidth:1,borderColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,width:'80%',marginTop:10}}>
+        <TouchableOpacity style={{borderWidth:1,borderColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,width:'80%',marginTop:10}}>
           <View style={{justifyContent:'center',alignItems:'center'}}>
             <Text style={{color:'#626262',fontWeight:500}}>REGISTER</Text>
           </View>
-        </Pressable>
-        <Pressable style={{backgroundColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,marginTop:8,width:'80%'}}>
+        </TouchableOpacity>
+        <TouchableOpacity style={{backgroundColor:'#111B2B',borderRadius:5,paddingHorizontal:10,paddingVertical:15,marginTop:8,width:'80%'}}>
           <View style={{justifyContent:'center',alignItems:'center'}}>
             <Text style={{color:'white',fontWeight:500}}>LOGIN</Text>
           </View>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       {/* <View style={styles.role}>
         {!user && showLoginButton && (
