@@ -180,7 +180,6 @@ export default function PassengerHome({ navigation }){
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
- 
 
 
 
@@ -352,11 +351,11 @@ const handleCommon = async (type) => {
             <Ionicons name="close" size={20} color="black" />
           </TouchableOpacity>
         )}
-         {showDropdown && (
+        {showDropdown && (
         <View style={styles.dropdown}>
           
-          <ScrollView  style={{ height:150,
-    marginHorizontal: 20,}}>
+          <ScrollView    style={{ maxHeight:150,
+    marginHorizontal: 20,zIndex:1}}>
           {filterDestinations(destination).map((item, index) => (
             <TouchableOpacity
                   
@@ -371,38 +370,18 @@ const handleCommon = async (type) => {
             </ScrollView>
         </View>
       )}  
-     
-      
-     
-
-      
-  
-                   
-
-                  
               </View>
-          
- 
-     
-
         </View>
             </View>
-           
-
         </View>
-
-
         </View>
-      
-    
-         <View style={{marginTop:70}}>
-               
+        <View style={{marginTop:70,zIndex:0}}>
                 <View  style={{width:'100%',height:130,marginTop:40,marginHorizontal:20}}>
                   <TouchableOpacity
                   style={{...styles.rscontainer,backgroundColor:'#F9F4F4'}}
                     onPress={handleReverse}>
                     <View  >
-                        <Image  source={require('../../../assets/image/reserved.png')} style={{resizeMode: 'contain',height:100,width:150,marginTop:-35}}/>
+                        <Image  source={require('../../../assets/image/reserved.png')} style={{resizeMode: 'contain',height:100,width:150,marginTop:-35,zIndex:0}}/>
                         <View style={{backgroundColor:"#0F992E",justifyContent:'center',height:30,marginTop:40}}>
                         <Text style={styles.text1}>Reserved</Text> 
                         </View>
@@ -416,11 +395,9 @@ const handleCommon = async (type) => {
                         <Text style={styles.text1}>Sharing</Text> 
                         </View>
                     </View>
-
                     </TouchableOpacity>
-                   
                 </View>
-             
+
                 {/* <View>
                 <Text style={{paddingHorizontal:'10%',fontSize: 14, fontWeight:'bold',color:'#4A4A4A',marginTop:25}}>
                   Pre-Defined Destinations
@@ -434,23 +411,18 @@ const handleCommon = async (type) => {
                     numColumns={2}
                     contentContainerStyle={styles.itemContainer}
                     // showsHorizontalScrollIndicator={false}
-                    
-   
                     />
                 </View> */}
-               
-               
+
         </View>  
-     
- 
-     
     </View>
     )
 }
 const styles = StyleSheet.create({
     head:{
         backgroundColor:'#FBD3A8',
-        height:200
+        height:200,
+        zIndex:1,
     },
     text:{
         paddingHorizontal:'8%',
