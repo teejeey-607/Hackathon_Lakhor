@@ -144,9 +144,6 @@ const MapPage = ({ route,navigation}) => {
   };
 
 
-
-
-
       
 
   return (

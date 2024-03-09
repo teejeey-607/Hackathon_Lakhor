@@ -51,9 +51,10 @@ const styles = StyleSheet.create({
     resizeMode:"contain"
     },
     logo:{
+        marginTop:15,
         width:"55%",
         resizeMode:"contain",
-        height:'10%'
+        height:'15%'
     },
     text:{
         marginTop:"15%",
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     },
     role:{
         flexDirection:"row",
-        marginTop:"10%",
+        marginTop:"5%",
         color:"white"
     },
     passenger:{

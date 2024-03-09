@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     width: "50%",
     marginTop: "25%",
     resizeMode: "contain",
-    height: '10%'
+    height: '13%'
   },
   register: {
     marginTop: "5%",
