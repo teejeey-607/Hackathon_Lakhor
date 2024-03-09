@@ -176,7 +176,7 @@ const MapPage = ({ route,navigation}) => {
             
   
     </View>
-    <View style={{alignItems:'center',paddingTop:20}}>
+    <View style={{alignItems:'center',paddingTop:20,backgroundColor:'white'}}>
         <TextInput  style={styles.input} placeholder='pick time'
         value={time}
         onChangeText={(text) => setTime(text)}
