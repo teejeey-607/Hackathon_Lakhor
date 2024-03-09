@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View,Alert,TouchableOpacity,StatusBar,Pressable,ScrollView,KeyboardAvoidingView ,TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker, Callout } from 'react-native-maps';
-
 import axios from 'axios';
 import { Button } from 'react-native-paper';
 import config from '../../../config';
@@ -24,20 +23,21 @@ const PassengerInput = ({ value, onChange }) => {
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <TouchableOpacity style={{backgroundColor:'#FF6B00',borderRadius:5,alignItems:'center',justifyContent:'center',
+      {/* <TouchableOpacity style={{backgroundColor:'#FF6B00',borderRadius:5,alignItems:'center',justifyContent:'center',
       paddingHorizontal:15,paddingVertical:8,marginRight:10}} onPress={decrement}>
         <Text style={{ fontSize: 20,color:'white',fontWeight:500 }}>-</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TextInput
         style={{ height: 40, borderColor: '#D9D9D9',width:5, borderWidth: 1, flex: 1 ,borderRadius:5,paddingHorizontal:10}}
         keyboardType="numeric"
+        placeholder='Enter no. of passenger'
         value={value ? value.toString() : ''} // Ensure value is not undefined before calling toString()
         onChangeText={onChange}
       />
-      <TouchableOpacity onPress={increment} style={{backgroundColor:'#FF6B00',borderRadius:5,alignItems:'center',justifyContent:'center',
+      {/* <TouchableOpacity onPress={increment} style={{backgroundColor:'#FF6B00',borderRadius:5,alignItems:'center',justifyContent:'center',
       paddingHorizontal:15,paddingVertical:8,marginLeft:10}}>
         <Text style={{ fontSize: 20,color:'white',fontWeight:500 }}>+</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+    marginTop:-30
 
   },
   marker: {
