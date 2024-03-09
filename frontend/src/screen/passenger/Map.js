@@ -6,8 +6,7 @@ import axios from 'axios';
 import { Button } from 'react-native-paper';
 import config from '../../../config';
 import * as SecureStore from 'expo-secure-store';
-
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 const PassengerInput = ({ value, onChange }) => {
    const increment = () => {
    if (value < 6) {
@@ -54,6 +53,22 @@ const MapPage = ({ route,navigation}) => {
   // const [date,setDate]=useState('');
   const [date, setDate] = useState(new Date())
 
+  const [rideDate, setRideDate] = useState(new Date());
+  const [rideTime, setRideTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || rideDate;
+    setShowDatePicker(Platform.OS === 'ios');
+    setRideDate(currentDate);
+  };
+
+  const handleTimeChange = (event, selectedTime) => {
+    const currentTime = selectedTime || rideTime;
+    setShowTimePicker(Platform.OS === 'ios');
+    setRideTime(currentTime);
+  };
   
 
   useEffect(() => {
@@ -185,7 +200,40 @@ const MapPage = ({ route,navigation}) => {
         value={date}
         onChangeText={(text) => setDate(text)}
         />
-       
+           {/* <View>
+      <View style={{width:'80%'}}>
+          <View style={{flexDirection:'row',justifyContent:'center'}}>
+            <View style={{justifyContent:'center'}}>
+            <Text style={{color:'#111B2B',fontWeight:500,fontSize:12,paddingRight:20}}>Select Ride Date</Text>
+            </View>
+          <DateTimePicker
+            value={rideDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+            
+          />
+          </View>
+          <View style={{flexDirection:'row',justifyContent:'center',marginTop:20,marginBottom:20}}>
+          <View style={{justifyContent:'center'}}>
+          <Text style={{color:'#111B2B',fontWeight:500,fontSize:12,paddingRight:20}}>Select Ride Time</Text>
+          </View>
+              <DateTimePicker
+            value={rideTime}
+            mode="time"
+            is24Hour={true}
+            onChange={handleTimeChange}
+
+          />
+          </View>
+      </View>
+        <View>
+        </View>
+        <View>
+
+          </View>
+
+    </View> */}
 
         {/* <TextInput style={styles.input}
          placeholder='number of passenger'
@@ -259,6 +307,7 @@ btn: {
     paddingVertical: "4%"
 
   },
+  
 
   centeredView: {
     flex: 1,

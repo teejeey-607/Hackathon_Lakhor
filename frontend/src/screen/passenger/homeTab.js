@@ -134,13 +134,9 @@ const CustomAlert = ({ message, visible, onClose }) => {
   );
 };
 
-
-
 export default function PassengerHome({ navigation }){
     // StatusBar.setBackgroundColor('#FBD3A8');
     StatusBar.setBarStyle('dark-content');
-
-
 
   const [pickupPoint, setPickupPoint] = useState('');
   const [destination, setDestination] = useState('');
