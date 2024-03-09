@@ -1,18 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const pool = require('./src/utils/db');
-const dotenv = require('dotenv');
-const connect =require("nats");
-
-const passengerRoutes = require('./src/routes/passengerRoutes');
-const driverRoutes = require('./src/routes/driverRoutes');
-const rideRoutes = require('./src/routes/rideRoutes');
-const driverModel = require('./src/models/driverModel');
-const passengerModel = require('./src/models/passengerModel');
-const passengersMapModel = require('./src/models/passengerMapModel')
-const rideModel = require('./src/models/rideModel')
-const locationModel=require('./src/models/driverLocationModel')
-const feedbackModel =require('./src/models/feedbackModel')
+const express = require("express");
+const cors = require("cors");
+const pool = require("./src/utils/db");
+const dotenv = require("dotenv");
+// const { subscribeToNATS } = require("./server");
+const { connect, nkeyAuthenticator } = require('nats');
+const passengerRoutes = require("./src/routes/passengerRoutes");
+const driverRoutes = require("./src/routes/driverRoutes");
+const rideRoutes = require("./src/routes/rideRoutes");
+const driverModel = require("./src/models/driverModel");
+const passengerModel = require("./src/models/passengerModel");
+const passengersMapModel = require("./src/models/passengerMapModel");
+const rideModel = require("./src/models/rideModel");
+const locationModel = require("./src/models/driverLocationModel");
+const feedbackModel = require("./src/models/feedbackModel");
 
 // const bodyParser = require('body-parser');
 
@@ -20,39 +20,47 @@ dotenv.config();
 
 const app = express();
 
-const servers = [
-  {},
-  { servers: ["demo.nats.io:4442", "demo.nats.io:4222"] },
-  { servers: "demo.nats.io:4443" },
-  { port: 4222 },
-  { servers: "localhost" },
-];
+// Configuration for subscribing to NDI NATS server for staging
+const natsURL = 'nats://13.229.203.54:4222';
+const seed = new TextEncoder().encode(
+  "SUAEL6GG2L2HIF7DUGZJGMRUFKXELGGYFMHF76UO2AYBG3K4YLWR3FKC2Q",
+);
 
-await servers.forEach(async (v) => {
+async function subscribeToNDINATS(threadId) {
   try {
-    const nc = await connect(v);
-    console.log(`connected to ${nc.getServer()}`);
-    // this promise indicates the client closed
-    const done = nc.closed();
-    // do something with the connection
+    const nc = await connect({
+      servers: [natsURL],
+      authenticator: nkeyAuthenticator(seed),
+    });
 
-    // close the connection
-    await nc.close();
-    // check if the close was OK
-    const err = await done;
-    if (err) {
-      console.log(`error closing:`, err);
+    console.log('Connected to NDI NATS server');
+
+    // Subscribe to the desired pattern ('threadId')
+    const subscription = nc.subscribe(threadId);
+
+    // Process incoming messages
+    for await (const msg of subscription) {
+      console.log('Received message from NDI NATS:', msg.data);
+      // Handle the received message as needed
     }
+
+    // Handle errors
+    subscription.on('error', (err) => {
+      console.error('Subscription error:', err);
+    });
   } catch (err) {
-    console.log(`error connecting to ${JSON.stringify(v)}`);
+    console.error('Error connecting to NDI NATS server:', err);
   }
-});
+}
+
+// Call the function to subscribe
+// subscribeToNDINATS();
 
 // Parse URL-encoded bodies (e.g., form data)
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
-const ipAddress = '192.168.129.216';
+const ipAddress = "192.168.129.216";
 
 // Middleware
 app.use(express.json()); // add this line to use express.json() middleware
@@ -101,19 +109,26 @@ pool
     await feedbackModel.createfeedbackTable();
   })
   .catch((error) => {
-    console.error('Error connecting to PostgreSQL:', error);
+    console.error("Error connecting to PostgreSQL:", error);
   });
 
 // Sample route
-app.get('/api/sample', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
+app.get("/api/sample", (req, res) => {
+  res.json({ message: "Hello from the backend!" });
+});
+
+app.post("/subscribe", (req, res) => {
+  const { ThreadID } = req.body;
+  console.log(ThreadID);
+  subscribeToNDINATS(ThreadID);
+  res.json({ message: "Hello from the backend!" });
+  // subscribeToNATS();
 });
 
 // Use routes
-app.use('/api', passengerRoutes);
-app.use('/api', driverRoutes);
-app.use('/api', rideRoutes);
-
+app.use("/api", passengerRoutes);
+app.use("/api", driverRoutes);
+app.use("/api", rideRoutes);
 
 // Start the server
 app.listen(port, () => {

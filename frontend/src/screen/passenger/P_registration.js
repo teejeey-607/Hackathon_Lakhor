@@ -7,7 +7,9 @@ import {
   TextInput,
   Pressable,
   StatusBar,
-  Alert,Button, Linking
+  Alert,
+  Button,
+  Linking,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-native-element-dropdown";
@@ -57,7 +59,8 @@ export default function Register({ navigation }) {
                   name: "Full Name",
                   restrictions: [
                     {
-                      cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                      cred_def_id:
+                        "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
                       schema_id:
                         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
                     },
@@ -67,7 +70,8 @@ export default function Register({ navigation }) {
                   name: "Gender",
                   restrictions: [
                     {
-                      cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                      cred_def_id:
+                        "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
                       schema_id:
                         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
                     },
@@ -87,7 +91,8 @@ export default function Register({ navigation }) {
                   name: "ID Type",
                   restrictions: [
                     {
-                      cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                      cred_def_id:
+                        "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
                       schema_id:
                         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
                     },
@@ -97,7 +102,8 @@ export default function Register({ navigation }) {
                   name: "ID Number",
                   restrictions: [
                     {
-                      cred_def_id: "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
+                      cred_def_id:
+                        "Ka4s9yvjDetTTME9KWuXAj:3:CL:51994:revocable",
                       schema_id:
                         "7tmq7RgiwSwE8e8DEuLCaP:2:Foundational ID:0.0.5",
                     },
@@ -129,15 +135,28 @@ export default function Register({ navigation }) {
                   selfAttestedAllowed: true,
                 },
               ],
-            },{
-              headers:{
+            },
+            {
+              headers: {
                 Authorization: `Bearer ${token}`,
-              }
+              },
             }
           );
-          console.log(response.data['data']['deepLinkURL']);
-          console.log(response.data['data']['proofRequestThreadId']);
-          setLink(response.data['data']['deepLinkURL'])
+          console.log(response.data["data"]["deepLinkURL"]);
+          console.log(response.data["data"]["proofRequestThreadId"]);
+          setLink(response.data["data"]["deepLinkURL"]);
+
+          const threadId = response.data["data"]["proofRequestThreadId"];
+
+          if (response.data["data"]["proofRequestThreadId"]) {
+            const response = await axios.post(
+              `${config.API_URL}/subscribe`,
+              {
+                ThreadID: threadId,
+              }
+            );
+            console.log(response.data);
+          }
         }
       } catch (error) {
         console.error("Error fetching passengers:", error);
@@ -148,11 +167,12 @@ export default function Register({ navigation }) {
   }, []); // The empty dependency array ensures this effect runs only once on component mount
 
   const handlePress = async () => {
-    const deepLink = 'bhutanndidemo://data?url=https://staging-shortener.s3.ap-southeast-1.amazonaws.com/oY8jq7hI';
+    const deepLink =
+      "bhutanndidemo://data?url=https://staging-shortener.s3.ap-southeast-1.amazonaws.com/oY8jq7hI";
     try {
       await Linking.openURL(link);
     } catch (error) {
-      console.error('Error opening deep link:', error);
+      console.error("Error opening deep link:", error);
     }
   };
 
@@ -532,7 +552,6 @@ export default function Register({ navigation }) {
           </Pressable> */}
 
           <Button title="Open Deep Link" onPress={handlePress} />
-
         </View>
       </View>
     </ScrollView>
