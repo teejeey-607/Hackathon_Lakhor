@@ -6,18 +6,21 @@ import {
   Image,
   Linking,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import isUserRegistered from "./isUserRegistered";
 import { useAuth } from "./AuthContext";
 import axios from "axios";
 import config from "../../../config";
+import { useIsFocused } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 export default function Passenger({ navigation }) {
   const { user } = useAuth();
   const [showLoginButton, setShowLoginButton] = useState(false);
   const [registerPressed, setRegisterPressed] = useState(false);
 
-  const [link, setLink] = useState("");
+  const [ThreadID, setThreadID] = useState(null);
 
   const handleRegisterPressIn = () => {
     setRegisterPressed(true);
@@ -42,35 +45,139 @@ export default function Passenger({ navigation }) {
     }
   }, [user]);
 
-  const fetchAccessToken = async () => {
-    try {
+  const [Loading, setLoading] = useState(false);
 
-      const response = await axios.get(`${config.API_URL}/subscribe`);
-      console.log(response.data.deepLinkURL);
+  const register = async () => {
+    console.log("tt,", ThreadID);
+    if (ThreadID === null) {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${config.API_URL}/subscribe`);
+        console.log(response.data.deepLinkURL);
+        console.log(response.data.ThreadID);
+        setThreadID(response.data.ThreadID);
 
-      if (response.data) {
-        try {
-          await Linking.openURL(response.data.deepLinkURL);
-        } catch (error) {
-          console.error("Error opening deep link:", error);
+        if (response.data) {
+          try {
+            await Linking.openURL(response.data.deepLinkURL);
+          } catch (error) {
+            console.error("Error opening deep link:", error);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching passengers:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching passengers:", error);
+    } else {
+      try {
+        // setLoading(true);
+        console.log("validating threadID");
+        const response = await axios.get(
+          `${config.API_URL}/validate/${ThreadID}`
+        );
+        // console.log("validating threadID123");
+        // // Handle response data here if needed
+        // console.log(response.data["data"]["status"]);
+
+        // if (response.data["data"]["status"] === "proofInvitationCreated"){
+        //   setThreadID(null);
+        // }
+
+        if (response.data["data"]["status"] === "ProofValidated") {
+          const response = await axios.get(
+            `${config.API_URL}/api/passengers/v/${ThreadID}`
+          );
+
+          console.log(response.data);
+
+          const registeredData = {
+            userId: response.data.id,
+            name: response.data.name,
+            gender: response.data.gender,
+            cid: response.data.cid,
+            mobilenumber: response.data.mobilenumber,
+          };
+          console.log("login: registeredData", registeredData);
+
+          await SecureStore.setItemAsync(
+            "registeredData",
+            JSON.stringify(registeredData)
+          );
+
+          navigation.replace("PassengerTab");
+        }
+      } catch (error) {
+        console.error("Error occurred while validating:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  // useEffect(() => {
-  //   //testing the api to fetch data
+  const isFocused = useIsFocused();
 
-  // }, []); // The empty dependency array ensures this effect runs only once on component mount
+  // useEffect(() => {
+  //   let intervalId;
+
+  //   const fetchData = async () => {
+  //     console.log("h2o", ThreadID); // Log the ThreadID value
+
+  //     if (ThreadID) {
+  //       console.log("h232o", ThreadID); // Log the ThreadID value
+  //       try {
+  //         const response = await axios.get(`${config.API_URL}/validate/${ThreadID}`);
+  //         // Do something with the response if needed
+  //         if (response.data["data"]["status"] === "ProofValidated")
+  //         console.log("response.data");
+  //         navigation.replace("PassengerTab");
+  //         clearInterval(intervalId); // Clear the previous interval
+  //         intervalId = setInterval(fetchData, 2000); // Set interval to run every 2 seconds
+  //       } catch (error) {
+  //         console.error('Error fetching data:', error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData(); // Initial call to fetchData
+
+  //   // Cleanup function to clear the interval when the component unmounts or ThreadID changes
+  //   return () => clearInterval(intervalId);
+  // }, [ThreadID]);
+
+  // const login = async () => {
+  //   try {
+
+  //     const response = await axios.get(`${config.API_URL}/subscribe/login`);
+  //     console.log(response.data.deepLinkURL);
+
+  //     if (response.data) {
+  //       try {
+  //         await Linking.openURL(response.data.deepLinkURL);
+  //       } catch (error) {
+  //         console.error("Error opening deep link:", error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching passengers:", error);
+  //   }
+  // };
 
   const handlePress = async () => {
-    fetchAccessToken();
-
-    const deepLink =
-      "bhutanndidemo://data?url=https://staging-shortener.s3.ap-southeast-1.amazonaws.com/oY8jq7hI";
+    register();
   };
+
+  // const handlePress2 = async () => {
+  //   login();
+  // };
+
+  if (Loading)
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Please wait...</Text>
+      </View>
+    );
 
   return (
     <View style={styles.mainContainer}>
@@ -128,12 +235,7 @@ export default function Passenger({ navigation }) {
         </View>
         <View
           style={{ backgroundColor: "#111B2B", borderRadius: 5, marginTop: 10 }}
-        >
-          <Image
-            style={{ height: 40, width: 40 }}
-            source={require("../../../assets/image/ndi.png")}
-          />
-        </View>
+        ></View>
         <TouchableOpacity
           onPress={handlePress}
           style={{
@@ -143,14 +245,35 @@ export default function Passenger({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 15,
             width: "80%",
-            marginTop: 10,
+            marginTop: 40,
           }}
         >
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ color: "#626262", fontWeight: 500 }}>REGISTER</Text>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <Image
+              style={{
+                height: 40,
+                width: 40,
+                backgroundColor: "black",
+                marginRight: 20,
+              }}
+              source={require("../../../assets/image/ndi.png")}
+            />
+            <Text style={{ color: "#626262", fontWeight: 500 }}>
+              {ThreadID
+                ? "User authenticated, continue "
+                : "Continue using BHUTAN NDI"}
+            </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
+          onPress={handlePress}
           style={{
             backgroundColor: "#111B2B",
             borderRadius: 5,
@@ -163,7 +286,7 @@ export default function Passenger({ navigation }) {
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Text style={{ color: "white", fontWeight: 500 }}>LOGIN</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/* <View style={styles.role}>
         {!user && showLoginButton && (

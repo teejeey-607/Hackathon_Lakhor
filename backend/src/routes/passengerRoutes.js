@@ -10,6 +10,10 @@ router.get('/routerequest', passengerController.getAllDriver);
 
 router.get('/passengers', passengerController.getAllPassengers);
 router.post('/passengers', passengerController.createPassenger);
+
+//get passengers info by threadID
+// router.get('/passengers/:threadID', passengerController.getPassengerByThreadID);
+
 // Add registration route
 router.get('/passengers/check-duplicate/:cid',passengerController.checkDuplicateCID);
 
@@ -68,6 +72,23 @@ router.get('/passengers/user/:id', async (req, res) => {
     }
   });
 
+  router.get('/passengers/v/:threadID', async (req, res) => {
+    const { threadID } = req.params;
+    console.log(threadID, "this is thread id");
+
+    try {
+      const passenger = await passengerController.getPassengerByThreadID(threadID);
+  
+      if (!passenger) {
+        return res.status(404).json({ message: 'Passenger not found' });
+      }
+  
+      res.json(passenger);
+    } catch (error) {
+      console.error('Error fetching passenger:', error);
+      res.status(500).json({ message: `Internal Server Error: ${error.message}` });
+    }
+  });
 
 
   
