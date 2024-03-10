@@ -5,8 +5,9 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import axios from 'axios';
 import { Button } from 'react-native-paper';
 import config from '../../../config';
+import moment from 'moment/moment';
 import * as SecureStore from 'expo-secure-store';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 const PassengerInput = ({ value, onChange }) => {
    const increment = () => {
    if (value < 6) {
@@ -192,58 +193,25 @@ const MapPage = ({ route,navigation}) => {
   
     </View>
     <View style={{alignItems:'center',paddingTop:20,backgroundColor:'white'}}>
-        {/* <TextInput  style={styles.input} placeholder='pick time'
+        <TextInput  style={styles.input} placeholder='pick time'
         value={time}
         onChangeText={(text) => setTime(text)}
         />
           <TextInput  style={styles.input} placeholder='date'
         value={date}
         onChangeText={(text) => setDate(text)}
-        /> */}
-           <View>
-      <View style={{width:'80%'}}>
-          <View style={{flexDirection:'row',justifyContent:'center'}}>
-            <View style={{justifyContent:'center'}}>
-            <Text style={{color:'#111B2B',fontWeight:500,fontSize:12,paddingRight:20}}>Select Ride Date</Text>
-            </View>
-          <DateTimePicker
-            value={rideDate}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-            
-          />
-          </View>
-          <View style={{flexDirection:'row',justifyContent:'center',marginTop:20,marginBottom:20}}>
-          <View style={{justifyContent:'center'}}>
-          <Text style={{color:'#111B2B',fontWeight:500,fontSize:12,paddingRight:20}}>Select Ride Time</Text>
-          </View>
-              <DateTimePicker
-            value={rideTime}
-            mode="time"
-            is24Hour={true}
-            onChange={handleTimeChange}
-
-          />
-          </View>
-      </View>
-        <View>
-        </View>
-        <View>
-
-          </View>
-
-    </View>
-
+        />
+           
         {/* <TextInput style={styles.input}
          placeholder='number of passenger'
          value={numberofpassenger}
          keyboardType="numeric"
          onChangeText={(text)=>setNumberofpassenger(text)}/> */}
 
-        <TextInput style={styles.input} placeholder='add pickup note'
+        <TextInput style={styles.input} placeholder='add pickup point'
         value={pickupnote}
         onChangeText={(Text)=>setPickupnote(Text)}/>
+
         <View style={{width:'80%',marginBottom:20}}>
           <PassengerInput style={{color:'red'}} value={numberofpassenger} onChange={setNumberofpassenger} />
         </View>

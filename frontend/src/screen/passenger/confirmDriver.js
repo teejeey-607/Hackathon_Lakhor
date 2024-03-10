@@ -42,7 +42,7 @@ export default function ConfirmDriver({ navigation, route }) {
     if (showAlert) {
       const timer = setTimeout(() => {
         setShowAlert(false);
-        navigation.navigate('cancelOption');
+        // navigation.navigate('cancelOption');
       }, 5000); // 5 seconds in milliseconds
 
       // Clear the timer if the component is unmounted before 5 seconds
@@ -126,7 +126,7 @@ export default function ConfirmDriver({ navigation, route }) {
             longitude: parseFloat(driver.longitude),
           }}
         >
-          <Ionicons name="car" size={24} color="#4A4A4A" />
+          <Ionicons name="car" size={30} color="blue" />
         </Marker>
       ))}
 

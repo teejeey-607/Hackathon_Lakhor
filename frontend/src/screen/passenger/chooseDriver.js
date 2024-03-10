@@ -150,7 +150,7 @@ const ChooseDriver = ({ route, navigation }) => {
                 >
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: '15%' }}>
-                      <Ionicons name="car" size={24} color="#4A4A4A" />
+                      <Ionicons name="car" size={30} color="gray" />
                     </View>
                     <View style={{ justifyContent: 'center', width: '40%',alignItems:'center' }}>
                       <Text style={{ fontSize: 12, fontWeight: 500 }}>{driver.vehicletype}</Text>

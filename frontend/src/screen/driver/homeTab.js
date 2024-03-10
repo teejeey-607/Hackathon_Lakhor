@@ -616,7 +616,7 @@ useEffect(() => {
                                                 
                                               </View>
                                               <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', width: '65%' }}>
-                                                <Text style={{ fontSize: 14, fontWeight: 700 }}>{`Nu.: 200`}</Text>
+                                                <Text style={{ fontSize: 14, fontWeight: 700 }}>{`Nu.200`}</Text>
                                               </View>
                                             </View>
                                           </View>
